@@ -1,0 +1,110 @@
+/* ── ROOT ─────────────────────────────────────────────────────────────────
+   Covers the full viewport. overflow: hidden prevents scrollbars
+   from appearing if any child element accidentally overflows. */
+.wip-root {
+  position: fixed;
+  inset: 0;
+  background: #080808;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── BACKGROUND ────────────────────────────────────────────────────────────
+   Fills the entire root. z-index 0 puts it behind content.
+   pointer-events: none means mouse clicks pass through to elements below —
+   without this the background would "eat" your clicks. */
+.wip-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── CONTENT ───────────────────────────────────────────────────────────────
+   Stacked vertically in the center.
+   z-index 10 puts it in front of the background.
+   gap controls spacing between each child element. */
+.wip-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* ── NEON WORD ─────────────────────────────────────────────────────────────
+   display: block puts each word on its own line.
+   letter-spacing spreads letters apart for that neon sign look. */
+.neon-word {
+  display: block;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  line-height: 1;
+}
+
+/* ── NEON LETTER ───────────────────────────────────────────────────────────
+   Each letter is inline so they sit side by side within the word.
+   transition makes the on/off change smooth rather than instant —
+   0.08s is fast enough to feel like a real flicker. */
+.neon-letter {
+  display: inline-block;
+  transition: opacity 0.08s ease, text-shadow 0.08s ease;
+}
+
+/* The "off" state — letter dims to 15% opacity, glow disappears.
+   This is toggled by the NeonText component via the className prop. */
+.neon-letter.off {
+  opacity: 0.15;
+  text-shadow: none !important;
+}
+
+/* ── WHITE/GREEN NEON — used for "ERROR" ───────────────────────────────────
+   text-shadow layers multiple glows at different blur sizes.
+   The outermost (80px) creates the wide ambient glow.
+   The tightest (6px) creates the sharp bright core.
+   clamp(3rem, 10vw, 7rem) means: min 3rem, max 7rem, ideally 10% of viewport.
+   This makes the text automatically scale between mobile and desktop. */
+.neon-white .neon-letter {
+  font-size: clamp(3rem, 10vw, 7rem);
+  color: #ffffff;
+  text-shadow:
+    0 0 80px #ffffff,
+    0 0 30px #00cc44,
+    0 0 6px #0044ff;
+}
+
+/* ── RED NEON — used for "404" ─────────────────────────────────────────────
+   Same layered shadow technique but in red tones.
+   Slightly larger font size makes 404 feel more prominent than ERROR. */
+.neon-red .neon-letter {
+  font-size: clamp(5rem, 18vw, 12rem);
+  color: #ff2200;
+  text-shadow:
+    0 0 80px #ff0000,
+    0 0 30px #cc0000,
+    0 0 6px #880000;
+}
+
+/* ── STATIC TEXT ───────────────────────────────────────────────────────────
+   Softer styling — these lines support the main headline,
+   so they should be quieter visually. */
+.wip-message {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+}
+
+.wip-sub {
+  font-family: 'Courier New', monospace;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.12em;
+}
